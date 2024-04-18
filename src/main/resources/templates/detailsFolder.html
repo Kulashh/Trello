@@ -1,0 +1,94 @@
+<html lang="en" layout:decorate="~{layout/main.html}" xmlns:layout="http://www.w3.org/1999/xhtml">
+<body>
+<div layout:fragment="custom-content">
+    <div class="card">
+        <div class="card-header">
+        </div>
+        <div class="card-body">
+            <h5 class="card-title" th:text="${detailsFolder.getName()}"></h5>
+            <button type="button" class="btn btn-white" data-bs-toggle="modal" data-bs-target="#exampleModalCat">
+                <strong>+Add Category</strong>
+            </button>
+            <div class="modal fade" id="exampleModalCat" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabelCat">Add Category</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <form th:action="@{'/addCategoryToFolder/' + ${detailsFolder.getId()}}" method="post">
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <label class="form-label">Category Name:</label>
+                                    <select name="catName" class="form-control">
+                                        <option th:each="cat:${allTaskCat}" th:text="${cat.getName()}" th:value="${cat.getId()}"></option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary">Save changes</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <button class="btn btn-primary">UPDATE</button>
+            <button class="btn btn-danger">DELETE</button>
+        </div>
+    </div>
+    <br>
+    <button type="button" class="btn btn-white" data-bs-toggle="modal" data-bs-target="#exampleModal">
+        <strong>+ NEW TASK</strong>
+    </button>
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">ADD TASK</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form th:action="@{'/addTask/' +${detailsFolder.getId()}}" method="post">
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label class="form-label">TASK NAME:</label>
+                            <input type="text" class="form-control" name="taskName">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">DESCRIPTION:</label>
+                            <textarea class="form-control" name="taskDesc"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <br><br>
+    <table class="table table-striped table-hover">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>TASK NAME</th>
+            <th>STATUS</th>
+            <th WIDTH="10%">DETAILS</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="task:${allTaskByFolder}">
+            <td th:text="${task.getId()}"></td>
+            <td th:text="${task.getTitle()}"></td>
+            <td th:if="${task.getStatus()==0}" th:text="'TO DO'" style="color: darkblue"></td>
+            <td>
+                <a th:href="@{'/folders/detailsFolder/detailsTask/'+ ${task.getId()}}"  class="btn btn-primary">VIEW MORE</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
